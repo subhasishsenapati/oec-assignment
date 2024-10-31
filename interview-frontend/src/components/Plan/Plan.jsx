@@ -6,7 +6,7 @@ import {
   getProcedures,
   getUsers,
 } from "../../api/api";
-import Layout from '../Layout/Layout';
+import Layout from "../Layout/Layout";
 import ProcedureItem from "./ProcedureItem/ProcedureItem";
 import PlanProcedureItem from "./PlanProcedureItem/PlanProcedureItem";
 
@@ -23,7 +23,9 @@ const Plan = () => {
       var users = await getUsers();
 
       var userOptions = [];
-      users.map((u) => userOptions.push({ label: u.name, value: u.userId }));
+      users.forEach((u) => {
+        userOptions.push({ label: u.name, value: u.userId });
+      });
 
       setUsers(userOptions);
       setProcedures(procedures);
@@ -32,7 +34,9 @@ const Plan = () => {
   }, [id]);
 
   const handleAddProcedureToPlan = async (procedure) => {
-    const hasProcedureInPlan = planProcedures.some((p) => p.procedureId === procedure.procedureId);
+    const hasProcedureInPlan = planProcedures.some(
+      (p) => p.procedureId === procedure.procedureId
+    );
     if (hasProcedureInPlan) return;
 
     await addProcedureToPlan(id, procedure.procedureId);
@@ -82,6 +86,7 @@ const Plan = () => {
                       {planProcedures.map((p) => (
                         <PlanProcedureItem
                           key={p.procedure.procedureId}
+                          planId={id}
                           procedure={p.procedure}
                           users={users}
                         />
